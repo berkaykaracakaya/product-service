@@ -15,8 +15,7 @@ services:
     ports:
       - 5432:5432
   product:
-    build: ./Product.Api
+    image: mcr.microsoft.com/dotnet/sdk:5.0
+    build: ./
     ports: 
       - 8085:80
-    environment:
-      - DATABASE_CONNECTION="Server=localhost;Port=5432;Database=product_db;Userid=root;Password=password;"

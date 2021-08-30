@@ -6,8 +6,8 @@ WORKDIR /workdir
 COPY . .
 
 RUN dotnet nuget locals all -c
-RUN dotnet restore ./Product.Api.csproj
-RUN dotnet publish ./Product.Api.csproj -o /publish -c release
+RUN dotnet restore ./Product.Api/Product.Api.csproj
+RUN dotnet publish ./Product.Api/Product.Api.csproj -o /publish -c release
 
 #Runtime Stage
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
