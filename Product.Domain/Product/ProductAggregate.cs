@@ -12,7 +12,6 @@ namespace Product.Domain.Product
     {
         public ProductAggregate()
         {
-            
         }
 
         public ProductAggregate(string title, string description, double quantity, List<ProductCategory> categories)
@@ -31,7 +30,7 @@ namespace Product.Domain.Product
         public double Quantity { get; set; }
         public List<ProductCategory> Categories { get; set; }
 
-        public void UpdateProduct(string title,string description,double quantity,List<ProductCategory> categories)
+        public void Update(string title, string description, double quantity, List<ProductCategory> categories)
         {
             Title = title;
             Description = description;
@@ -39,22 +38,24 @@ namespace Product.Domain.Product
             Categories = categories;
             EnsureProductAlive();
             SetAsModified();
-            AddEvent(ProductEvent.Updated,new ProductUpdated(this));
+            AddEvent(ProductEvent.Updated, new ProductUpdated(this));
         }
-        
+
+        public void Delete()
+        {
+            SetAsModified();
+            AddEvent(ProductEvent.Deleted, new ProductDeleted(this));
+        }
+
         private void EnsureProductAlive()
         {
-            if (Categories == null && Categories.Count != 0)
-            {
+            if (Categories == null && Categories.Count == 0)
                 throw new Exception(ProductExceptions.ProductHaveAMinimumOneCategory);
-            }
-            
+
             var acceptorCategories =
                 Categories.Where(x => x.MaxStockQuantity >= Quantity && x.MinStockQuantity <= Quantity);
-            if (acceptorCategories.Count() == Categories.Count)
-            {
+            if (acceptorCategories.Count() != Categories.Count)
                 throw new Exception(ProductExceptions.ProductCategoryNotQuantityValid);
-            }
         }
     }
 }

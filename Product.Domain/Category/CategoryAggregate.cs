@@ -8,10 +8,10 @@ namespace Product.Domain.Category
     {
         public CategoryAggregate()
         {
-            
         }
 
-        public CategoryAggregate(long parentId, string title, double minStockQuantity, double maxStockQuantity, bool status)
+        public CategoryAggregate(long parentId, string title, double minStockQuantity, double maxStockQuantity,
+            bool status)
         {
             ParentId = parentId;
             Title = title;
@@ -19,9 +19,9 @@ namespace Product.Domain.Category
             MaxStockQuantity = maxStockQuantity;
             Status = status;
             SetAsCreated();
-            AddEvent(CategoryEvent.Created,new CategoryCreated(this));
+            AddEvent(CategoryEvent.Created, new CategoryCreated(this));
         }
-        
+
         public long ParentId { get; set; }
         public string Title { get; set; }
         public double MinStockQuantity { get; set; }

@@ -1,8 +1,9 @@
 - cd ./product-service
 - docker-compose up --build
-+ new Terminal
+- new Terminal
+- app.settings database server localhost change
 - cd Product.Infrastructure
 - dotnet ef database update -c ProductDbContext -s ../Product.Api/Product.Api.csproj
-- first terminal CTRL+C
+- app.settings database server postgres change
 - docker-compose up --build
 - Project started in -> localhost:8085

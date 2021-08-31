@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Product.Application.Interfaces;
 using Product.Domain.Category;
 using Product.Domain.Common;
 using Product.Domain.Product;
-using Product.Domain.Product.ValueObjects;
 using Product.Infrastructure.Common.ValueObjects;
 
 namespace Product.Infrastructure.Persistence
@@ -38,7 +36,7 @@ namespace Product.Infrastructure.Persistence
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
-            this.ApplyAggregateProperties(modelBuilder);
+            ApplyAggregateProperties(modelBuilder);
         }
 
         private async Task SendOutboxEvents(CancellationToken cancellationToken)
@@ -116,20 +114,22 @@ namespace Product.Infrastructure.Persistence
             long num = 0;
             return num;
         }
-        
+
         private void ApplyAggregateProperties(ModelBuilder modelBuilder)
         {
-            foreach (IMutableEntityType mutableEntityType in modelBuilder.Model.GetEntityTypes().Where<IMutableEntityType>((Func<IMutableEntityType, bool>) (t => typeof (AggregateRoot).IsAssignableFrom(t.ClrType))))
+            foreach (var mutableEntityType in modelBuilder.Model.GetEntityTypes()
+                .Where((Func<IMutableEntityType, bool>) (t => typeof(AggregateRoot).IsAssignableFrom(t.ClrType))))
             {
-                EntityTypeBuilder entityTypeBuilder = modelBuilder.Entity(mutableEntityType.ClrType);
-                string sequenceNameFromType = this.GetSequenceNameFromType(mutableEntityType.ClrType);
+                var entityTypeBuilder = modelBuilder.Entity(mutableEntityType.ClrType);
+                var sequenceNameFromType = GetSequenceNameFromType(mutableEntityType.ClrType);
                 modelBuilder.HasSequence<long>(sequenceNameFromType).StartsAt(1L).IncrementsBy(1);
                 entityTypeBuilder.Ignore("Events");
                 entityTypeBuilder.Ignore("IsModified");
                 entityTypeBuilder.Property("Id").HasColumnName("id").ValueGeneratedNever();
                 entityTypeBuilder.Property("CreatedDate").HasColumnName("created_date");
                 entityTypeBuilder.Property("LastModifiedDate").HasColumnName("last_modified_date");
-                entityTypeBuilder.Property("Version").HasColumnName("xmin").HasColumnType("xid").ValueGeneratedOnAddOrUpdate().IsConcurrencyToken();
+                entityTypeBuilder.Property("Version").HasColumnName("xmin").HasColumnType("xid")
+                    .ValueGeneratedOnAddOrUpdate().IsConcurrencyToken();
                 entityTypeBuilder.HasKey("Id");
             }
         }

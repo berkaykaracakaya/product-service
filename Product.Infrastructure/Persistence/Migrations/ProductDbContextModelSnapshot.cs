@@ -21,7 +21,56 @@ namespace Product.Infrastructure.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.HasSequence("category_id_seq");
+
             modelBuilder.HasSequence("product_id_seq");
+
+            modelBuilder.Entity("Product.Domain.Category.CategoryAggregate", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    b.Property<long>("CreatedDate")
+                        .HasColumnType("bigint")
+                        .HasColumnName("created_date");
+
+                    b.Property<long>("LastModifiedDate")
+                        .HasColumnType("bigint")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<double>("MaxStockQuantity")
+                        .HasColumnType("double precision")
+                        .HasColumnName("max_stock_quantity");
+
+                    b.Property<double>("MinStockQuantity")
+                        .HasColumnType("double precision")
+                        .HasColumnName("min_stock_quantity");
+
+                    b.Property<long>("ParentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("pid");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("boolean")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("categories");
+                });
 
             modelBuilder.Entity("Product.Domain.Product.ProductAggregate", b =>
                 {

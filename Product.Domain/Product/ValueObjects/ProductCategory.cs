@@ -6,7 +6,8 @@ namespace Product.Domain.Product.ValueObjects
         {
         }
 
-        public ProductCategory(long ıd, long parentId, string title, double minStockQuantity, double maxStockQuantity,bool status)
+        public ProductCategory(long ıd, long parentId, string title, double minStockQuantity, double maxStockQuantity,
+            bool status)
         {
             Id = ıd;
             ParentId = parentId;

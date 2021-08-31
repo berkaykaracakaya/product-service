@@ -12,6 +12,7 @@ namespace Product.Domain.Category.Events
             MaxStockQuantity = category.MaxStockQuantity;
             Status = category.Status;
         }
+
         public long ParentId { get; set; }
         public string Title { get; set; }
         public double MinStockQuantity { get; set; }
